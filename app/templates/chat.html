@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat</title>
+    <meta charset="UTF-8">
+
+</head>
+<body>
+<div id="room">
+<a href="#" onclick=join(this.text)>jushenfeng</a>
+<a href="#" onclick=join(this.text)>aiouniya</a>
+<a href="#" onclick=join(this.text)>heisemeigui</a>
+</div>
+
+<textarea name="" id="chat_content" cols="80" rows="40"></textarea>
+<input type="text" id="message">
+<button onclick=send_msg()>提交</button>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+    var current_room = ''
+    var chat_content = document.getElementById('chat_content')
+	var socket_url = 'http://' + document.domain + ':' + location.port + '/chat'
+	console.log(socket_url)
+    var socket = io.connect(socket_url);
+
+    socket.on('status', function(data){
+        console.log('join111')
+        if (data.code == '200'){
+            // chat_content.innerHTML = chat_content.innerHTML + '\n' + data.msg
+            console.log('dsfsdfsdfsd')
+            chat_content.innerHTML = chat_content.innerHTML + '\n' + data.msg
+        }
+    });
+    var join=function(text) {
+        console.log('join222')
+        socket.emit('join1', {msg:'join', room:text})
+        current_room = text
+        alert('join success!' + '  '+text)
+
+    };
+    var send_msg=function(){
+        // body...
+        message = document.getElementById('message').value;
+        socket.emit('message', {message:message, room:current_room});
+    };
+    var left=function(){
+        emit('left');
+    }
+
+</script>
+
+
+</script>
+</body>
+</html>
